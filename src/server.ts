@@ -112,7 +112,7 @@ export function createServer(
 
   app.get<{ Params: { id: string } }>('/sessions/:id/export', async (request, reply) => {
     const id = request.params.id.replace(/[^a-zA-Z0-9_-]/g, '')
-    const events = db.getSessionEvents(request.params.id)
+    const events = db.getSessionEvents(id)
     const jsonl = events.map(e => JSON.stringify(e)).join('\n')
     reply.header('Content-Type', 'application/x-ndjson')
     reply.header('Content-Disposition', `attachment; filename="session-${id}.jsonl"`)
