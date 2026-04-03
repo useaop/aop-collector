@@ -129,6 +129,23 @@ export function createServer(
     return { ok: true }
   })
 
+  app.get('/', async () => {
+    return {
+      name: 'aop-collector',
+      version: '0.1.0',
+      spec: 'aop/1.0',
+      endpoints: {
+        'POST /events': 'Submit an AOP event',
+        'GET /stream': 'SSE event stream',
+        'GET /sessions': 'List all sessions',
+        'GET /sessions/:id': 'Get session with events',
+        'GET /sessions/:id/export': 'Export session as JSONL',
+        'DELETE /sessions/:id': 'Delete a session',
+        'GET /health': 'Health check',
+      },
+    }
+  })
+
   app.get('/health', async () => {
     return { ok: true, version: '0.1.0', subscribers: broadcaster.subscriberCount }
   })
