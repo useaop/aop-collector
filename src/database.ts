@@ -96,23 +96,30 @@ export class AOPDatabase {
         VALUES (?, ?, ?, ?, 'running', ?, ?)
       `).run(event.session_id, event.agent_id, event.parent_session_id, goal, event.timestamp, event.timestamp)
     } else {
-      const updates: Record<string, unknown> = { last_seen_at: event.timestamp }
-
       if (event.type === 'session.heartbeat') {
-        updates.total_steps = event.payload.step as number ?? existing.total_steps
-        updates.total_tokens = event.payload.token_spend as number ?? existing.total_tokens
+        this.db.prepare(`
+          UPDATE sessions SET last_seen_at = ?, total_steps = ?, total_tokens = ? WHERE id = ?
+        `).run(
+          event.timestamp,
+          event.payload.step as number ?? existing.total_steps,
+          event.payload.token_spend as number ?? existing.total_tokens,
+          event.session_id
+        )
+      } else if (event.type === 'session.ended') {
+        this.db.prepare(`
+          UPDATE sessions SET last_seen_at = ?, status = ?, ended_at = ?, total_steps = ?, total_tokens = ?, total_cost_usd = ? WHERE id = ?
+        `).run(
+          event.timestamp,
+          event.payload.status as string ?? 'completed',
+          event.timestamp,
+          event.payload.total_steps as number ?? existing.total_steps,
+          event.payload.total_tokens as number ?? existing.total_tokens,
+          event.payload.total_cost_usd as number ?? null,
+          event.session_id
+        )
+      } else {
+        this.db.prepare('UPDATE sessions SET last_seen_at = ? WHERE id = ?').run(event.timestamp, event.session_id)
       }
-
-      if (event.type === 'session.ended') {
-        updates.status = event.payload.status as string ?? 'completed'
-        updates.ended_at = event.timestamp
-        updates.total_steps = event.payload.total_steps as number ?? existing.total_steps
-        updates.total_tokens = event.payload.total_tokens as number ?? existing.total_tokens
-        updates.total_cost_usd = event.payload.total_cost_usd as number ?? null
-      }
-
-      const setClauses = Object.keys(updates).map(k => `${k} = @${k}`).join(', ')
-      this.db.prepare(`UPDATE sessions SET ${setClauses} WHERE id = @id`).run({ ...updates, id: event.session_id })
     }
   }
 

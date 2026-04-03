@@ -22,7 +22,7 @@ export async function startCollector(config: CollectorConfig = {}) {
   const detector = new AnomalyDetector(db, broadcaster)
   const server = createServer(db, broadcaster, detector)
 
-  await server.listen({ port, host: '0.0.0.0' })
+  await server.listen({ port, host: '127.0.0.1' })
 
   if (openBrowser) {
     const { default: open } = await import('open')

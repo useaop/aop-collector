@@ -11,9 +11,19 @@ export class AnomalyDetector {
   ) {}
 
   analyse(event: AOPEvent): void {
+    if (event.type === 'session.ended') {
+      this.cleanup(event.session_id)
+      return
+    }
     this.detectLoop(event)
     this.detectConfidenceDrop(event)
     this.detectErrorCascade(event)
+  }
+
+  private cleanup(sessionId: string): void {
+    this.toolCallHistory.delete(sessionId)
+    this.consecutiveLowConfidence.delete(sessionId)
+    this.consecutiveErrors.delete(sessionId)
   }
 
   private detectLoop(event: AOPEvent): void {
