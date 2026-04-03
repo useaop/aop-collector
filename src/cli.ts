@@ -14,7 +14,8 @@ if (command === 'start') {
     port: 4317,
     openBrowser: true,
   }).then(() => {
-    console.log(pc.gray('  collector') + '  ' + pc.white('http://localhost:4317'))
+    console.log(pc.gray('  collector ') + ' ' + pc.white('http://localhost:4317'))
+    console.log(pc.gray('  dashboard ') + ' ' + pc.white('http://localhost:4317/dashboard/'))
     console.log('')
     console.log(pc.gray('  ready. waiting for agents...'))
     console.log('')

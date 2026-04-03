@@ -26,7 +26,7 @@ export async function startCollector(config: CollectorConfig = {}) {
 
   if (openBrowser) {
     const { default: open } = await import('open')
-    await open(`http://localhost:${port}`)
+    await open(`http://localhost:${port}/dashboard/`)
   }
 
   return { server, db, broadcaster }

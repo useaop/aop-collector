@@ -30,12 +30,12 @@ export function createServer(
     ],
   })
 
-  // Serve dashboard static files if available
-  const dashboardPath = path.join(__dirname, '../../aop-dashboard/out')
+  // Serve bundled dashboard static files
+  const dashboardPath = path.join(__dirname, '../dashboard')
   if (fs.existsSync(dashboardPath)) {
     app.register(fastifyStatic, {
       root: dashboardPath,
-      prefix: '/',
+      prefix: '/dashboard/',
       decorateReply: false,
     })
   }
@@ -142,6 +142,7 @@ export function createServer(
         'GET /sessions/:id/export': 'Export session as JSONL',
         'DELETE /sessions/:id': 'Delete a session',
         'GET /health': 'Health check',
+        'GET /dashboard/': 'Real-time dashboard UI',
       },
     }
   })
