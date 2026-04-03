@@ -1,0 +1,35 @@
+{
+  "name": "@useaop/collector",
+  "version": "0.1.0",
+  "description": "Local event collector and server for the Agent Observability Protocol",
+  "bin": {
+    "aop": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/cli.ts src/index.ts --format cjs --dts",
+    "dev": "tsx src/cli.ts start",
+    "start": "node dist/cli.js start",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["aop", "agent", "observability", "collector"],
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^4.27.0",
+    "@fastify/cors": "^9.0.0",
+    "@fastify/static": "^7.0.0",
+    "better-sqlite3": "^9.4.0",
+    "open": "^10.1.0",
+    "picocolors": "^1.0.1"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.4.0",
+    "@types/node": "^20.0.0",
+    "@types/better-sqlite3": "^7.6.8"
+  }
+}
