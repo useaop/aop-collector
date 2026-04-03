@@ -72,10 +72,15 @@ export function createServer(
       return
     }
 
+    const origin = request.headers.origin
+    const allowedOrigins = ['http://localhost:3000', 'http://localhost:4317', 'http://127.0.0.1:3000', 'http://127.0.0.1:4317']
+    const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0]
+
     reply.raw.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': corsOrigin,
     })
 
     const send = (data: object) => {
