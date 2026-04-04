@@ -1,6 +1,6 @@
 # @useaop/collector
 
-Local event collector and server for the [Agent Observability Protocol](https://useaop.dev).
+Local event collector, real-time dashboard, and anomaly detector for the [Agent Observability Protocol](https://useaop.dev).
 
 ## Quick Start
 
@@ -12,11 +12,24 @@ npx @useaop/collector start
 ● aop — Agent Observability Protocol
 
   collector  http://localhost:4317
+  dashboard  http://localhost:4317/dashboard/
 
   ready. waiting for agents...
 ```
 
-The collector receives AOP events from your agents, stores them in a local SQLite database, and provides a real-time event stream via Server-Sent Events.
+One command gives you:
+- **Collector** on `:4317` — receives events from your agents via HTTP
+- **Dashboard** at `/dashboard/` — real-time UI to watch your agents think, with live event streaming
+- **SQLite storage** — all events persisted locally at `~/.aop/events.db`
+
+The dashboard opens automatically in your browser. Run an instrumented agent and watch events stream in live.
+
+## Dashboard
+
+The bundled dashboard provides:
+- **Sessions overview** — all active and completed sessions with status, cost, and duration
+- **Live session detail** — real-time event feed as your agent runs, with metrics and confidence indicators
+- **Anomaly alerts** — inline warnings when loops, confidence drops, or error cascades are detected
 
 ## API
 
@@ -29,6 +42,7 @@ The collector receives AOP events from your agents, stores them in a local SQLit
 | `GET /sessions/:id/export` | Export session as JSONL |
 | `DELETE /sessions/:id` | Delete a session and its events |
 | `GET /health` | Health check |
+| `GET /dashboard/` | Real-time dashboard UI |
 
 ## Anomaly Detection
 
@@ -38,7 +52,7 @@ The collector automatically detects:
 - **Confidence drop** — agent expresses low confidence 3 times in a row
 - **Error cascade** — 3 consecutive tool failures
 
-Alerts are broadcast via SSE and stored alongside session data.
+Alerts are broadcast via SSE and displayed inline in the dashboard.
 
 ## Storage
 
