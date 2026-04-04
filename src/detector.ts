@@ -3,7 +3,7 @@ import type { AOPDatabase } from './database'
 import type { Broadcaster } from './broadcaster'
 
 export class AnomalyDetector {
-  private toolCallHistory = new Map<string, { tool: string; timestamp: number }[]>()
+  private toolCallHistory = new Map<string, { tool: string; input: string; timestamp: number }[]>()
 
   constructor(
     private db: AOPDatabase,
@@ -30,6 +30,7 @@ export class AnomalyDetector {
     if (event.type !== 'operation.tool_start') return
 
     const tool = event.payload.tool as string
+    const input = JSON.stringify(event.payload.input ?? '').slice(0, 200)
     const sessionId = event.session_id
     const now = Date.now()
     const windowMs = 60_000
@@ -39,13 +40,19 @@ export class AnomalyDetector {
     }
 
     const history = this.toolCallHistory.get(sessionId)!
-    history.push({ tool, timestamp: now })
+    history.push({ tool, input, timestamp: now })
 
     const recent = history.filter(h => now - h.timestamp < windowMs)
     this.toolCallHistory.set(sessionId, recent)
 
     const toolCalls = recent.filter(h => h.tool === tool)
-    if (toolCalls.length >= 3) {
+    if (toolCalls.length >= 5) {
+      // Check if inputs are similar — a real loop repeats similar queries
+      const inputs = toolCalls.map(h => h.input)
+      const uniqueInputs = new Set(inputs).size
+      const similarityRatio = 1 - (uniqueInputs / inputs.length)
+      // Only flag if more than half the inputs are duplicates
+      if (similarityRatio < 0.4) return
       const alert: Omit<Alert, 'created_at'> = {
         session_id: sessionId,
         type: 'loop',
