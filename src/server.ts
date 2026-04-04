@@ -35,7 +35,7 @@ export function createServer(
   if (fs.existsSync(dashboardPath)) {
     app.register(fastifyStatic, {
       root: dashboardPath,
-      prefix: '/dashboard/',
+      prefix: '/dashboard',
       decorateReply: false,
     })
   }
