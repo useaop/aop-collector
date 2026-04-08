@@ -70,6 +70,12 @@ const { server, db, broadcaster } = await startCollector({
 })
 ```
 
+## Community
+
+- [Discord](https://discord.gg/wawmrFMRHG)
+- [GitHub](https://github.com/useaop)
+- [Documentation](https://useaop.dev/docs)
+
 ## License
 
 MIT
