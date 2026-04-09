@@ -36,7 +36,6 @@ export function createServer(
     app.register(fastifyStatic, {
       root: dashboardPath,
       prefix: '/dashboard',
-      decorateReply: false,
     })
   }
 
@@ -76,6 +75,7 @@ export function createServer(
     const allowedOrigins = ['http://localhost:3000', 'http://localhost:4317', 'http://127.0.0.1:3000', 'http://127.0.0.1:4317']
     const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0]
 
+    reply.hijack()
     reply.raw.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',

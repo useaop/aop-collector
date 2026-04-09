@@ -1,6 +1,6 @@
 {
   "name": "@useaop/collector",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Local event collector and server for the Agent Observability Protocol",
   "bin": {
     "aop": "./dist/cli.js"
@@ -23,12 +23,18 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@fastify/cors": "^9.0.0",
-    "@fastify/static": "^7.0.0",
+    "@fastify/cors": "^11.0.0",
+    "@fastify/static": "^9.0.0",
     "better-sqlite3": "^12.8.0",
-    "fastify": "^4.27.0",
+    "fastify": "^5.8.3",
     "open": "^10.1.0",
     "picocolors": "^1.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": ">=6.4.2",
+      "esbuild": ">=0.25.0"
+    }
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
@@ -36,6 +42,6 @@
     "tsup": "^8.0.0",
     "tsx": "^4.7.0",
     "typescript": "^5.4.0",
-    "vitest": "^1.4.0"
+    "vitest": "^3.0.0"
   }
 }
