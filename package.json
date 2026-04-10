@@ -1,6 +1,6 @@
 {
   "name": "@useaop/collector",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Local event collector and server for the Agent Observability Protocol",
   "bin": {
     "aop": "./dist/cli.js"

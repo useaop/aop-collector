@@ -66,6 +66,8 @@ if (command === 'start') {
       console.log('')
       console.log(pc.gray('  ready. waiting for agents...'))
       console.log('')
+      console.log(pc.gray('  what are you building? → ') + pc.white('discord.gg/wawmrFMRHG'))
+      console.log('')
 
       const shutdown = () => {
         console.log('')
